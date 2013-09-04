@@ -20,10 +20,22 @@ body {
 
 #road-map {
   position: absolute;
-  width: 30%;
-  height: 40%;
+  width: 500px;
+  height: 300px;
   right: 0;
   top: 0;
+  z-index: 1;
+  border: solid black;
+  border-style: double;
+}
+
+#guess-box {
+  position: absolute;
+  background-color: #ffffff;
+  width: 500px;
+  height: 150px;
+  right: 0;
+  top: 300px;
   z-index: 1;
   border: solid black;
   border-style: double;

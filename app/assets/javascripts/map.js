@@ -39,8 +39,22 @@ $(document).ready(function(){
           var map = new google.maps.Map(document.getElementById("road-map"),
            mapOptions);
 
-          // Generating the Street View Map with a delay to allow for reassignment of lat & long (if nec.)
-          setTimeout(function(){var streetMap = new google.maps.StreetViewPanorama(document.getElementById("street-map"), StreetViewPanoramaOptions);}, 1000);
+          // Generating the Street View Map
+          var streetMap = new google.maps.StreetViewPanorama(document.getElementById("street-map"), StreetViewPanoramaOptions);
+
+
+          var markerOptions = {
+            position: new google.maps.LatLng(0, 0),
+            visible: true,
+            draggable: true
+          };
+
+          var marker = new google.maps.Marker(markerOptions);
+            marker.setMap(map);
+
+          google.maps.event.addListener(marker, 'dragend', function(event){
+            console.log('newLat: ' + event.latLng.lat() + ' newLng: ' + event.latLng.lng());
+          });
 
           // If no acceptable Street View Location is found...
         } else {
@@ -52,4 +66,16 @@ $(document).ready(function(){
     });
   }
   generateMap();
+
+  // function addMyMarker() { //function that will add markers on button click
+  //   var marker = new google.maps.Marker({
+  //     position: new google.maps.LatLng(48.89364, 2.33739),
+  //     map: new google.maps.Map(document.getElementById("road-map"), mapOptions),
+  //     draggable: true,
+  //     animation: google.maps.Animation.DROP,
+  //     title:"This a new marker!",
+  //     icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+  //   });
+  // }
+
 });
