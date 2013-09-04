@@ -40,3 +40,7 @@ body {
   border: solid black;
   border-style: double;
 }
+
+text {
+  display: none;
+}
