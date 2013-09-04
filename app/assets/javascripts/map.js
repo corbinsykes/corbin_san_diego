@@ -1,4 +1,6 @@
 $(document).ready(function(){
+  var mapVariables = {};
+
   function generateMap() {
 
     // Picking a random latitude & longitude
@@ -11,7 +13,9 @@ $(document).ready(function(){
     var StreetViewPanoramaOptions = {
       visible: true,
       position: new google.maps.LatLng(randomLat, randomLng),
-      addressControl: false
+      addressControl: false,
+      linksControl: true,
+      panControl: true
     };
 
     // Setting a variable equal to returned Maps data
@@ -36,7 +40,7 @@ $(document).ready(function(){
           };
 
           // Generating the World Map
-          var map = new google.maps.Map(document.getElementById("road-map"),
+          mapVariables.map = new google.maps.Map(document.getElementById("road-map"),
            mapOptions);
 
           // Generating the Street View Map
@@ -46,14 +50,35 @@ $(document).ready(function(){
           var markerOptions = {
             position: new google.maps.LatLng(0, 0),
             visible: true,
-            draggable: true
+            draggable: true,
+            animation: google.maps.Animation.DROP
           };
 
           var marker = new google.maps.Marker(markerOptions);
-            marker.setMap(map);
+            marker.setMap(mapVariables.map);
 
           google.maps.event.addListener(marker, 'dragend', function(event){
             console.log('newLat: ' + event.latLng.lat() + ' newLng: ' + event.latLng.lng());
+            var markerLatLng = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
+            console.log(google.maps.geometry.spherical.computeDistanceBetween(StreetViewPanoramaOptions.position, markerLatLng) * 0.000621371);
+
+            var rightMarkerOptions = {
+              position: StreetViewPanoramaOptions.position,
+              visible: true,
+              draggable: false
+            };
+
+            var rightMarker = new google.maps.Marker(rightMarkerOptions);
+              rightMarker.setMap(mapVariables.map);
+
+            var line = new google.maps.Polyline({
+              path: [StreetViewPanoramaOptions.position, markerLatLng],
+              strokeColor: "#000000",
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+              geodesic: false,
+              map: mapVariables.map
+            });
           });
 
           // If no acceptable Street View Location is found...
@@ -66,16 +91,8 @@ $(document).ready(function(){
     });
   }
   generateMap();
-
-  // function addMyMarker() { //function that will add markers on button click
-  //   var marker = new google.maps.Marker({
-  //     position: new google.maps.LatLng(48.89364, 2.33739),
-  //     map: new google.maps.Map(document.getElementById("road-map"), mapOptions),
-  //     draggable: true,
-  //     animation: google.maps.Animation.DROP,
-  //     title:"This a new marker!",
-  //     icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
-  //   });
-  // }
-
 });
+setTimeout(function() {
+    console.log("Running");
+    $('text').remove();
+  }, 1000);
