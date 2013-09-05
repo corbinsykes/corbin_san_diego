@@ -44,3 +44,25 @@ body {
 text {
   display: none;
 }
+
+#accordion {
+  margin-top: 5em;
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  top: 450px;
+}
+
+#accordion .ui-accordion-header:first-of-type {
+  font-size: 26px;
+  text-align: center;
+  color: #FFFFFF;
+  height: 5em;
+}
+
+#accordion .ui-accordion-header:nth-of-type(2) {
+  font-size: 26px;
+  text-align: center;
+  color: #FFFFFF;
+  height: 5em;
+}

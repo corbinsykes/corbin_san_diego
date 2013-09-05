@@ -1,18 +1,19 @@
 $(document).ready(function(){
+  // The place where everything lives so I can retrieve things throughout the js file
   var mapVariables = {};
 
   function generateMap() {
 
     // Picking a random latitude & longitude
-    var randomLat = (Math.random() * (90 - (-90)) + (-90));
-    console.log(randomLat);
-    var randomLng = (Math.random() * (180 - (-180)) + (-180));
-    console.log(randomLng);
+    mapVariables.randomLat = (Math.random() * (90 - (-90)) + (-90));
+    console.log(mapVariables.randomLat);
+    mapVariables.randomLng = (Math.random() * (180 - (-180)) + (-180));
+    console.log(mapVariables.randomLng);
 
     // Setting up the Street View Map
     mapVariables.StreetViewPanoramaOptions = {
       visible: true,
-      position: new google.maps.LatLng(randomLat, randomLng),
+      position: new google.maps.LatLng(mapVariables.randomLat, mapVariables.randomLng),
       addressControl: false,
       linksControl: true,
       panControl: true
@@ -46,6 +47,7 @@ $(document).ready(function(){
           // Generating the Street View Map
           var streetMap = new google.maps.StreetViewPanorama(document.getElementById("street-map"), mapVariables.StreetViewPanoramaOptions);
 
+          // Setting up the default marker
           var markerOptions = {
             position: new google.maps.LatLng(0, 0),
             visible: true,
@@ -55,11 +57,15 @@ $(document).ready(function(){
 
           };
 
+          // Generating the default marker
           var marker = new google.maps.Marker(markerOptions);
             marker.setMap(mapVariables.map);
 
+          // Getting the lat & lng of the marker when dragged
           google.maps.event.addListener(marker, 'dragend', function(event){
             console.log('newLat: ' + event.latLng.lat() + ' newLng: ' + event.latLng.lng());
+            mapVariables.newLat = event.latLng.lat();
+            mapVariables.newLng = event.latLng.lng();
             mapVariables.markerLatLng = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
             mapVariables.distanceBtwn = Math.round(google.maps.geometry.spherical.computeDistanceBetween(mapVariables.StreetViewPanoramaOptions.position, mapVariables.markerLatLng) * 0.000621371);
           });
@@ -75,7 +81,10 @@ $(document).ready(function(){
   }
   generateMap();
 
+  // When the "I Think I'm Here" button is clicked
   $('#guess-button').click(function() {
+
+    // Setting up the marker of the Street View lat & lng
     var rightMarkerOptions = {
       position: mapVariables.StreetViewPanoramaOptions.position,
       visible: true,
@@ -83,9 +92,11 @@ $(document).ready(function(){
       icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
     };
 
+    // Generating the "right" marker
     var rightMarker = new google.maps.Marker(rightMarkerOptions);
       rightMarker.setMap(mapVariables.map);
 
+    // Drawing the line between the two points
     var line = new google.maps.Polyline({
       path: [mapVariables.StreetViewPanoramaOptions.position, mapVariables.markerLatLng],
       strokeColor: "#000000",
@@ -95,6 +106,10 @@ $(document).ready(function(){
       map: mapVariables.map
     });
 
+    // Centering the map at the midpoint of the line
+    mapVariables.map.setCenter(((mapVariables.randomLat - mapVariables.newLat) / 2), ((mapVariables.randomLng - mapVariables.newLng) /2));
+
+    // Letting the user know exactly how far off they are
     $('#guess-box').append("You were off by " + mapVariables.distanceBtwn + " miles!");
   });
 });
