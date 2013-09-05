@@ -106,8 +106,17 @@ $(document).ready(function(){
       map: mapVariables.map
     });
 
-    // Centering the map at the midpoint of the line
-    mapVariables.map.setCenter(((mapVariables.randomLat - mapVariables.newLat) / 2), ((mapVariables.randomLng - mapVariables.newLng) /2));
+    // Making an array of both LatLng points
+    var LatLngList = new Array (mapVariables.StreetViewPanoramaOptions.position, mapVariables.markerLatLng);
+    //  Creating a new viewpoint bound
+    var bounds = new google.maps.LatLngBounds ();
+    //  Going through each...
+    for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
+    //  And increasing the bounds to take this point
+      bounds.extend (LatLngList[i]);
+    }
+    //  Fitting these bounds to the map
+    mapVariables.map.fitBounds (bounds);
 
     // Letting the user know exactly how far off they are
     $('#guess-box').append("You were off by " + mapVariables.distanceBtwn + " miles!");
