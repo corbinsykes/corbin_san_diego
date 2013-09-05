@@ -1,4 +1,64 @@
 $(document).ready(function(){
+
+  roundCount();
+
+  function addForm(){
+    // Create form
+    var form = document.createElement("form");
+    form.setAttribute('method',"post");
+    form.setAttribute('action',"/leaderboard");
+
+    //Create input element
+    var input = document.createElement("input");
+    input.type = "text";
+    input.name = "Name";
+
+    //create a button
+    var submit = document.createElement("input");
+    submit.type = "submit";
+    submit.value = "Submit";
+
+    form.appendChild(input);
+    form.appendChild(submit);
+
+    $('#guess-button').replaceWith('');
+    $('#guess-box').append(form);
+    $('#round-box').text("Game Over! Enter in your name to be added to the Leaderboard!");
+
+  }
+
+  function gameOver(){
+    localStorage.refresh=1;
+  }
+
+  function roundCount(){
+    if (localStorage.refresh >= 3){
+      // hide the button show the final round button
+      gameOver();
+      addForm();
+    } else if (localStorage.refresh){
+        localStorage.refresh = Number(localStorage.refresh) + 1;
+        $('#guess-box').html('<div id="score-box"> </div>' +
+          '<div id="round-box">' +
+          '</div>' +
+          '<div id="button-box">' +
+            '<button class="guess" id="guess-button">I Think I\'m Here</button>' +
+          '</div>');
+      } else {
+        localStorage.refresh=1;
+        $('#guess-box').html('<div id="score-box"> </div>' +
+          '<div id="round-box">' +
+          '</div>' +
+          '<div id="button-box">' +
+            '<button class="guess" id="guess-button">I Think I\'m Here</button>' +
+          '</div>');
+      }
+    $('#round-box').text("Round " + localStorage.refresh + "/3");
+  }
+
+  // Telling the page to reload when "Next Round" button is clicked
+  $('body').on('click', '#next-button', reloadPage);
+
   // The place where everything lives so I can retrieve things throughout the js file
   var mapVariables = {};
 
@@ -83,7 +143,6 @@ $(document).ready(function(){
 
   // When the "I Think I'm Here" button is clicked
   $('#guess-button').click(function() {
-
     // Setting up the marker of the Street View lat & lng
     var rightMarkerOptions = {
       position: mapVariables.StreetViewPanoramaOptions.position,
@@ -109,7 +168,7 @@ $(document).ready(function(){
     // Making an array of both LatLng points
     var LatLngList = new Array (mapVariables.StreetViewPanoramaOptions.position, mapVariables.markerLatLng);
     //  Creating a new viewpoint bound
-    var bounds = new google.maps.LatLngBounds ();
+    var bounds = new google.maps.LatLngBounds();
     //  Going through each...
     for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
     //  And increasing the bounds to take this point
@@ -119,6 +178,18 @@ $(document).ready(function(){
     mapVariables.map.fitBounds (bounds);
 
     // Letting the user know exactly how far off they are
-    $('#guess-box').append("You were off by " + mapVariables.distanceBtwn + " miles!");
+    $('#score-box').append("You were off by " + mapVariables.distanceBtwn + " miles!");
+    // if local storage is 3 show game over instead
+    if (localStorage.refresh >= 3) {
+      addForm();
+    } else {
+      $('#guess-button').replaceWith('<button id="next-button">Next Round</button>');
+    }
   });
 });
+
+// Reloading the page when "Next Round is clicked"
+function reloadPage(){
+  console.log("click");
+  location.reload();
+}

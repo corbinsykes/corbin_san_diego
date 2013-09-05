@@ -31,7 +31,7 @@ body {
 
 #guess-box {
   position: absolute;
-  background-color: #ffffff;
+  background: -webkit-linear-gradient(top, #fefefe 0%, #eee9f0 100%);
   width: 500px;
   height: 150px;
   right: 0;
