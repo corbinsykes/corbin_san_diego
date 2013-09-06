@@ -23,12 +23,12 @@ $(document).ready(function(){
 
     $('#guess-button').replaceWith('');
     $('#guess-box').append(form);
-    $('#round-box').text("Game Over! Enter in your name to be added to the Leaderboard!");
+    $('#round-box').text("Game Over! You were a grand total of " + localStorage.getItem("score") + " miles away! Enter in your name to be added to the Leaderboard!");
 
   }
 
   function gameOver(){
-    localStorage.refresh=1;
+    localStorage.clear();
   }
 
   function roundCount(){
@@ -83,7 +83,7 @@ $(document).ready(function(){
     var streetViewService = new google.maps.StreetViewService();
 
     // Looking for acceptable Street View locations within 1000m
-    streetViewService.getPanoramaByLocation(mapVariables.StreetViewPanoramaOptions.position, 1000,
+    streetViewService.getPanoramaByLocation(mapVariables.StreetViewPanoramaOptions.position, 1000000,
       function(StreetViewPanoramaData, StreetViewStatus){
 
         // If an acceptable Street View location is found...
@@ -143,6 +143,9 @@ $(document).ready(function(){
 
   // When the "I Think I'm Here" button is clicked
   $('#guess-button').click(function() {
+
+    localStorage.setItem("score", parseInt(Number(mapVariables.distanceBtwn) + Number(localStorage.getItem("score"))));
+
     // Setting up the marker of the Street View lat & lng
     var rightMarkerOptions = {
       position: mapVariables.StreetViewPanoramaOptions.position,
