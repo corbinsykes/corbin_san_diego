@@ -12,7 +12,12 @@ $(document).ready(function(){
     var input = document.createElement("input");
     input.setAttribute("id", "name");
     input.type = "text";
-    input.name = "Name";
+    input.name = "name";
+
+    var score = document.createElement("input");
+    score.value = localStorage.getItem("score");
+    score.name = "score";
+    score.type = "hidden";
 
     // Create a button
     var submit = document.createElement("input");
@@ -22,6 +27,7 @@ $(document).ready(function(){
 
     // Add the input & button to the form
     form.appendChild(input);
+    form.appendChild(score);
     form.appendChild(submit);
 
     // Remove the guess button
@@ -89,7 +95,7 @@ $(document).ready(function(){
     var streetViewService = new google.maps.StreetViewService();
 
     // Looking for acceptable Street View locations within 1000m
-    streetViewService.getPanoramaByLocation(mapVariables.StreetViewPanoramaOptions.position, 1000000,
+    streetViewService.getPanoramaByLocation(mapVariables.StreetViewPanoramaOptions.position, 100000,
       function(StreetViewPanoramaData, StreetViewStatus){
 
         // If an acceptable Street View location is found...

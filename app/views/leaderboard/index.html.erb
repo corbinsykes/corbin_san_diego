@@ -1,0 +1,16 @@
+<h1 id="leaderboard">Leaderboard</h1>
+<br>
+<br>
+<br>
+<br>
+
+<div id="scores">
+
+  <% @scores.each do |score| %>
+    <%= score.name %>
+    <%= score.score %></br>
+  <% end %>
+
+</div>
+
+<a href="/"><button>Back to the Game</button></a>
