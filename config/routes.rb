@@ -2,5 +2,7 @@ CorbinSanDiego::Application.routes.draw do
 
   get '/' => 'welcome#index'
 
-  post '/leaderboard' => 'welcome#leaderboard'
+  get '/leaderboard' => 'leaderboard#index'
+  post '/leaderboard' => 'leaderboard#add'
+
 end
