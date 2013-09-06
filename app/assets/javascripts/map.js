@@ -8,21 +8,27 @@ $(document).ready(function(){
     form.setAttribute('method',"post");
     form.setAttribute('action',"/leaderboard");
 
-    //Create input element
+    // Create input element
     var input = document.createElement("input");
+    input.setAttribute("id", "name");
     input.type = "text";
     input.name = "Name";
 
-    //create a button
+    // Create a button
     var submit = document.createElement("input");
+    submit.setAttribute("id", "submit-button");
     submit.type = "submit";
     submit.value = "Submit";
 
+    // Add the input & button to the form
     form.appendChild(input);
     form.appendChild(submit);
 
+    // Remove the guess button
     $('#guess-button').replaceWith('');
+    // Add the scoring form
     $('#guess-box').append(form);
+    // Display total score & invite user to submit name
     $('#round-box').text("Game Over! You were a grand total of " + localStorage.getItem("score") + " miles away! Enter in your name to be added to the Leaderboard!");
 
   }
@@ -144,6 +150,7 @@ $(document).ready(function(){
   // When the "I Think I'm Here" button is clicked
   $('#guess-button').click(function() {
 
+    // Storing the score from each round
     localStorage.setItem("score", parseInt(Number(mapVariables.distanceBtwn) + Number(localStorage.getItem("score"))));
 
     // Setting up the marker of the Street View lat & lng
@@ -188,6 +195,10 @@ $(document).ready(function(){
     } else {
       $('#guess-button').replaceWith('<button id="next-button">Next Round</button>');
     }
+  });
+
+  $('#submit-button').click(function(){
+    $('#name').appendTo('#name-list');
   });
 });
 
