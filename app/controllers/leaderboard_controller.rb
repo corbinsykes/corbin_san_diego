@@ -1,7 +1,7 @@
 class LeaderboardController < ApplicationController
 
   def index
-    @scores = Leaderboard.all
+    @scores = Leaderboard.order("score ASC")
   end
 
   def add
